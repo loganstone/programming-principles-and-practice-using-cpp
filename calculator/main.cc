@@ -1,6 +1,14 @@
 // Copyright 2019 Loagan
+#include <cmath>
 #include <iostream>
 #include <stdexcept>
+#include <string>
+
+constexpr char kNumber = '8';
+constexpr char kQuit = 'q';
+constexpr char kPrint = ';';
+constexpr char kPrompt[] = "> ";
+constexpr char kResult[] = "= ";
 
 class Token {
  public:
@@ -34,14 +42,15 @@ Token TokenStream::get() {
   char ch;
   std::cin >> ch;
   switch (ch) {
-    case '=':
-    case 'x':
+    case kQuit:
+    case kPrint:
     case '(':
     case ')':
     case '+':
     case '-':
     case '*':
     case '/':
+    case '%':
       return Token{ch, -1};
     case '.':
     case '0':
@@ -57,7 +66,7 @@ Token TokenStream::get() {
       std::cin.putback(ch);
       double val;
       std::cin >> val;
-      return Token{'8', val};
+      return Token{kNumber, val};
     }
     default:
       throw std::runtime_error("invalid token");
@@ -82,6 +91,8 @@ TokenStream ts;
  * Primary:
  *  Number
  *  "(" Expression ")"
+ *  "-" Primary
+ *  "+" Primary
  *
  * Number:
  *  floating-point-literal
@@ -100,8 +111,12 @@ double primary() {
       }
       return d;
     }
-    case '8':
+    case kNumber:
       return t.value;
+    case '-':
+      return -primary();
+    case '+':
+      return primary();
     default:
       throw std::runtime_error("missing primary");
   }
@@ -122,6 +137,15 @@ double term() {
           throw std::runtime_error("divide by 0");
         }
         left /= d;
+        t = ts.get();
+        break;
+      }
+      case '%': {
+        double d = primary();
+        if (d == 0) {
+          throw std::runtime_error("divide by 0");
+        }
+        left = std::fmod(left, d);
         t = ts.get();
         break;
       }
@@ -154,19 +178,19 @@ double expression() {
 
 int main() {
   try {
-    double val = 0;
     while (std::cin) {
+      std::cout << kPrompt;
       Token t = ts.get();
-      if (t.kind == 'x') {
-        break;
+      while (t.kind == kPrint) {
+        t = ts.get();
       }
 
-      if (t.kind == '=') {
-        std::cout << "= " << val << '\n';
-      } else {
-        ts.putback(t);
+      if (t.kind == kQuit) {
+        return 0;
       }
-      val = expression();
+
+      ts.putback(t);
+      std::cout << kResult << expression() << '\n';
     }
   } catch (std::exception& e) {
     std::cerr << e.what() << '\n';
