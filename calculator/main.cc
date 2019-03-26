@@ -20,23 +20,39 @@ class TokenStream {
  public:
   Token get();
   void putback(Token t);
+  void ignore(char c);
 
  private:
-  bool full{false};
+  bool is_buffer_full{false};
   Token buffer;
 };
 
 void TokenStream::putback(Token t) {
-  if (full) {
+  if (is_buffer_full) {
     throw std::runtime_error("buffer is full");
   }
   buffer = t;
-  full = true;
+  is_buffer_full = true;
+}
+
+void TokenStream::ignore(char c) {
+  if (is_buffer_full && c == buffer.kind) {
+    is_buffer_full = false;
+    return;
+  }
+
+  is_buffer_full = false;
+  char ch = 0;
+  while (std::cin >> ch) {
+    if (ch == c) {
+      return;
+    }
+  }
 }
 
 Token TokenStream::get() {
-  if (full) {
-    full = false;
+  if (is_buffer_full) {
+    is_buffer_full = false;
     return buffer;
   }
   char ch;
@@ -75,7 +91,16 @@ Token TokenStream::get() {
 
 TokenStream ts;
 
-/* Expression Syntax
+/* Statement:
+ *  Print
+ *  Quit
+ *  Expression
+ *
+ * Print:
+ *  ;
+ *
+ * Quit:
+ *  q
  *
  * Expression:
  *  Term
@@ -176,9 +201,11 @@ double expression() {
   }
 }
 
-int main() {
-  try {
-    while (std::cin) {
+void clean_up_mess() { ts.ignore(kPrint); }
+
+void calculate() {
+  while (std::cin) {
+    try {
       std::cout << kPrompt;
       Token t = ts.get();
       while (t.kind == kPrint) {
@@ -186,12 +213,22 @@ int main() {
       }
 
       if (t.kind == kQuit) {
-        return 0;
+        return;
       }
 
       ts.putback(t);
       std::cout << kResult << expression() << '\n';
+    } catch (std::exception& e) {
+      std::cerr << e.what() << '\n';
+      clean_up_mess();
     }
+  }
+}
+
+int main() {
+  try {
+    calculate();
+    return 0;
   } catch (std::exception& e) {
     std::cerr << e.what() << '\n';
     return 1;
