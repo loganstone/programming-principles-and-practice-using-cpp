@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include <string>
 
-#include "token.h"
+#include "token/token.h"
 
 TokenStream ts;
 

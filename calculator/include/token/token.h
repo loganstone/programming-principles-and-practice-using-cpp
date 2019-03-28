@@ -1,7 +1,7 @@
 // Copyright 2019 Loagan
 
-#ifndef CALCULATOR_TOKEN_H_
-#define CALCULATOR_TOKEN_H_
+#ifndef CALCULATOR_INCLUDE_TOKEN_TOKEN_H_
+#define CALCULATOR_INCLUDE_TOKEN_TOKEN_H_
 
 #include <iostream>
 
@@ -28,4 +28,4 @@ class TokenStream {
   Token buffer;
 };
 
-#endif  // CALCULATOR_TOKEN_H_
+#endif  // CALCULATOR_INCLUDE_TOKEN_TOKEN_H_

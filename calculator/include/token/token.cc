@@ -1,6 +1,6 @@
 // Copyright 2019 Loagan
 
-#include "token.h"
+#include "token/token.h"
 
 void TokenStream::putback(Token t) {
   if (is_buffer_full) {

@@ -15,16 +15,19 @@ SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH true)
 # 빌드 대상 바이너리 파일명 및 소스 파일 목록
 SET (OUTPUT_ELF "${CMAKE_PROJECT_NAME}-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.out")
 SET (SRC_FILES
-     token.h
-     token.cc
-     main.cc
+     include/token/token.h
+     include/token/token.cc
+     src/main.cc
     )
 
 # 공통 컴파일러
 SET (CMAKE_CXX_COMPILER "clang++")
 
 # 공통 헤더 파일 Include 디렉토리 (-I)
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR})
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/include)
+INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}/include)
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/src)
+INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}/src)
 
 # 공통 컴파일 옵션, 링크 옵션
 ADD_COMPILE_OPTIONS (-Wall --std=c++11)
