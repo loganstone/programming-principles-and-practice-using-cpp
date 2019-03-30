@@ -35,6 +35,7 @@ Token TokenStream::get() {
   switch (ch) {
     case kQuit:
     case kPrint:
+    case '=':
     case '(':
     case ')':
     case '+':
@@ -60,6 +61,19 @@ Token TokenStream::get() {
       return Token{kNumber, val};
     }
     default:
-      throw std::runtime_error("invalid token");
+      if (std::isalpha(ch)) {
+        std::string s;
+        s += ch;
+        while (std::cin.get(ch) && (std::isalpha(ch) || std::isdigit(ch))) {
+          s += ch;
+        }
+        std::cin.putback(ch);
+        if (s == kDeclKey) {
+          return Token{kLet};
+        }
+        return Token{kName, s};
+      }
+      std::string invalid_token{ch};
+      throw std::runtime_error("invalid token: " + invalid_token);
   }
 }
