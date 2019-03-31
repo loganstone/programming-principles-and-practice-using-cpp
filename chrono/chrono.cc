@@ -68,7 +68,15 @@ bool is_date(int y, Month m, int d) {
 }
 
 bool leapyear(int y) {
-  // TODO(logan): Must Implement
+  if (y % 4 != 0) {
+    return false;
+  }
+
+  if (y % 100 != 0) {
+    return true;
+  }
+
+  return y % 400 == 0;
 }
 
 bool operator==(const Date& l, const Date& r) {
