@@ -33,24 +33,69 @@ void Date::add_year(int n) {
 }
 
 bool is_date(int y, Month m, int d) {
-  // TODO(logan): Must Implement
+  if (y <= 0) {
+    return false;
+  }
+
+  if (d <= 0) {
+    return false;
+  }
+
+  if (m < Month::jan || Month::dec < m) {
+    return false;
+  }
+
+  int days_in_month = 31;
+  switch (m) {
+    case Month::feb:
+      days_in_month = (leapyear(y)) ? 29 : 28;
+      break;
+    case Month::apr:
+    case Month::jun:
+    case Month::sep:
+    case Month::nov:
+      days_in_month = 30;
+      break;
+    default:
+      break;
+  }
+
+  if (days_in_month < d) {
+    return false;
+  }
+
+  return true;
 }
+
 bool leapyear(int y) {
   // TODO(logan): Must Implement
 }
 
 bool operator==(const Date& l, const Date& r) {
-  // TODO(logan): Must Implement
+  return l.year() == r.year() && l.month() == r.month() && l.day() == r.day();
 }
-bool operator!=(const Date& l, const Date& r) {
-  // TODO(logan): Must Implement
+bool operator!=(const Date& l, const Date& r) { return !(l == r); }
+
+std::ostream& operator<<(std::ostream& os, const Date& d) {
+  return os << '(' << d.year() << ',' << d.month() << ',' d.day() << ')';
 }
 
-bool operator<<(std::ostream& os, const Date& d) {
-  // TODO(logan): Must Implement
-}
-bool operator>>(std::istream& is, Date& dd) {
-  // TODO(logan): Must Implement
+std::istream& operator>>(std::istream& is, Date& dd) {
+  int y, m, d;
+  char ch1, ch2, ch3, ch4;
+  is >> ch1 >> y >> ch2 >> m >> ch3 >> d >> ch4;
+  if (!is) {
+    return is;
+  }
+
+  if (ch1 != '(' || ch2 != ',' || ch3 != ',' || ch4 != ')') {
+    is.clear(std::ios::ios_base::failbit);
+    return is;
+  }
+
+  dd = Date(y, Month(m), d);
+
+  return is;
 }
 
 enum class Day {
