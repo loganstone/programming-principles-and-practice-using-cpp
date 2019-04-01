@@ -122,7 +122,7 @@ Day day_of_week(const Date& d) {
 Day next_sunday(const Date& d) {
   // TODO(logan): Must Implement
 }
-Day next_weekdayy(const Date& d) {
+Day next_weekday(const Date& d) {
   // TODO(logan): Must Implement
 }
 
