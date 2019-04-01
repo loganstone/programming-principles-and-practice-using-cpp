@@ -32,6 +32,24 @@ void Date::add_year(int n) {
   y += n;
 }
 
+int get_last_day_of_month(int y, Month m) {
+  int last_day = 31;
+  switch (m) {
+    case Month::feb:
+      last_day = (leapyear(y)) ? 29 : 28;
+      break;
+    case Month::apr:
+    case Month::jun:
+    case Month::sep:
+    case Month::nov:
+      last_day = 30;
+      break;
+    default:
+      break;
+  }
+  return last_day;
+}
+
 bool is_date(int y, Month m, int d) {
   if (y <= 0) {
     return false;
@@ -45,22 +63,7 @@ bool is_date(int y, Month m, int d) {
     return false;
   }
 
-  int days_in_month = 31;
-  switch (m) {
-    case Month::feb:
-      days_in_month = (leapyear(y)) ? 29 : 28;
-      break;
-    case Month::apr:
-    case Month::jun:
-    case Month::sep:
-    case Month::nov:
-      days_in_month = 30;
-      break;
-    default:
-      break;
-  }
-
-  if (days_in_month < d) {
+  if (get_last_day_of_month(y, m) < d) {
     return false;
   }
 

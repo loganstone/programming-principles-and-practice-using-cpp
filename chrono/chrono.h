@@ -42,6 +42,7 @@ class Date {
   int d;
 };
 
+int get_last_day_of_month(int y, Month m);
 bool is_date(int y, Month m, int d);
 bool leapyear(int y);
 
