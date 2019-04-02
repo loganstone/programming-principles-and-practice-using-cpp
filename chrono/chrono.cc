@@ -88,7 +88,8 @@ bool operator==(const Date& l, const Date& r) {
 bool operator!=(const Date& l, const Date& r) { return !(l == r); }
 
 std::ostream& operator<<(std::ostream& os, const Date& d) {
-  return os << '(' << d.year() << ',' << d.month() << ',' d.day() << ')';
+  return os << '(' << d.year() << ',' << static_cast<int>(d.month()) << ','
+            << d.day() << ')';
 }
 
 std::istream& operator>>(std::istream& is, Date& dd) {
