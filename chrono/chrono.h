@@ -49,8 +49,8 @@ bool leapyear(int y);
 bool operator==(const Date& l, const Date& r);
 bool operator!=(const Date& l, const Date& r);
 
-bool operator<<(std::ostream& os, const Date& d);
-bool operator>>(std::istream& is, Date& dd);
+std::ostream& operator<<(std::ostream& os, const Date& d);
+std::istream& operator>>(std::istream& is, Date& dd);
 
 }  // namespace Chrono
 
